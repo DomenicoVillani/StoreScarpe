@@ -1,4 +1,6 @@
-﻿namespace Scarpe.Models
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Scarpe.Models
 {
     public static class DB
     {

@@ -14,10 +14,10 @@ namespace Scarpe.Controllers
         [HttpGet]
         public IActionResult Dettagli([FromRoute] int? id)
         {
-            if(id.HasValue)
+            if (id.HasValue)
             {
                 var articolo = DB.GetById(id);
-                if(articolo is null)
+                if (articolo is null)
                 {
                     return View("Error");
                 }
@@ -26,7 +26,7 @@ namespace Scarpe.Controllers
                     return View(articolo);
                 }
             }
-            return RedirectToAction("Index","Articolo");
+            return RedirectToAction("Index", "Articolo");
         }
         [HttpGet]
         public IActionResult Add()
@@ -34,7 +34,7 @@ namespace Scarpe.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Add(string name, int prezzo , string description, string imgCover, string imgDetails1, string imgDetails2)
+        public IActionResult Add(string name, int prezzo, string description, string imgCover, string imgDetails1, string imgDetails2)
         {
             Articolo articolo = new Articolo();
             articolo.Name = name;
@@ -45,11 +45,32 @@ namespace Scarpe.Controllers
             {
                 articolo.ImgDetails = new List<string>();
             }
-            articolo.ImgDetails.Insert(0,imgDetails1);
+            articolo.ImgDetails.Insert(0, imgDetails1);
             articolo.ImgDetails.Insert(1, imgDetails2);
             DB.Add(articolo);
-            return RedirectToAction("Dettagli", new {id = articolo.Id});
+            return RedirectToAction("Dettagli", new { id = articolo.Id });
         }
 
+        [HttpGet]
+        public IActionResult Edit([FromRoute] int? id)
+        {
+            if (id.HasValue)
+            {
+                var articolo = DB.GetById(id);
+                if (articolo is null)
+                {
+                    return View("Error");
+                }
+                return View(articolo);
+            }
+            return RedirectToAction("Index", "Articolo");
+        }
+        [HttpPost]
+        public IActionResult Edit(Articolo articolo)
+        {
+            var updateArticolo = DB.Edit(articolo);
+            if (updateArticolo is null) return View("Error");
+            return RedirectToAction("Dettagli", new { id = articolo.Id });
+        }
     }
 }
