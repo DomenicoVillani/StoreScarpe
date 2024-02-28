@@ -28,7 +28,11 @@ namespace Scarpe.Controllers
             }
             return RedirectToAction("Index","Articolo");
         }
-
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult Add(string name, int prezzo , string description, string imgCover, string imgDetails1, string imgDetails2)
         {
@@ -37,8 +41,12 @@ namespace Scarpe.Controllers
             articolo.Prezzo = prezzo;
             articolo.Description = description;
             articolo.ImgCover = imgCover;
-            articolo.ImgDetails[0] = imgDetails1;
-            articolo.ImgDetails[1] = imgDetails2;
+            if (articolo.ImgDetails == null)
+            {
+                articolo.ImgDetails = new List<string>();
+            }
+            articolo.ImgDetails.Insert(0,imgDetails1);
+            articolo.ImgDetails.Insert(1, imgDetails2);
             DB.Add(articolo);
             return RedirectToAction("Dettagli", new {id = articolo.Id});
         }
